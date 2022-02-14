@@ -69,20 +69,16 @@
                 <div class="col">
                   <select
                     id="fromUser"
-                    class="form-select"
-                    aria-label="From User"
+                    onchange="selectOption()"
                   >
-
-                    <option selected>From</option>
-                    <option>Esra</option>
-                    <option>İsmail</option>
+                    <option value="Esra">Esra</option>
+                    <option value="İsmail">İsmail</option>
                   </select>
                 </div>
                 <div class="col">
-                  <select id="toUser" class="form-select" aria-label="To User">
-                    <option selected>To</option>
-                    <option>Esra</option>
-                    <option>İsmail</option>
+                  <select id="toUser" onchange="selectOption()">
+                    <option value="Esra">Esra</option>
+                    <option value="İsmail">İsmail</option>
                   </select>
                 </div>
                 <div class="col">
@@ -95,7 +91,7 @@
                 </div>
 
                 <div class="col">
-                  <button type="button" class="btn btn-outline-success">
+                  <button type="button" class="btn btn-outline-success" onclick="transactionalAction()">
                     Send
                   </button>
                 </div>

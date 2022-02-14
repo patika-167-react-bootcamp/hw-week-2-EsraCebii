@@ -15,16 +15,19 @@
     console.log(userName, userBalance);
 } */
 
-const userList = [
-  {
-    name: "Esra",
-    balance: 600,
-  },
-  {
-    name: "İsmail",
-    balance: 1000,
-  },
-];
+const state = {
+    userList: [
+        {
+          name: "Esra",
+          balance: 600,
+        },
+        {
+          name: "İsmail",
+          balance: 1000,
+        },
+      ]
+}
+
 const optionList = [
     {
         name: "Esra"
@@ -40,7 +43,7 @@ function renderUserList() {
     ]
     subscribers.forEach(function(subscriber){
         subscriber.innerHTML = ""
-        userList.forEach(function(item){
+        state.userList.forEach(function(item){
             const yeniLi = document.createElement("li"); 
             yeniLi.className = "list-group-item d-flex justify-content-between align-items-start";
             const nameDiv = document.createElement("div");
@@ -54,7 +57,7 @@ function renderUserList() {
     })
 
 }
-// Yeni bir kullanıcı eklendiğinde, para transferi kısmında  ismi select elementine de option  olarak eklensin =>  renderOptionList fonkiyonu
+// Yeni bir kullanıcı eklendiğinde, para transferi kısmında kullanıcı  ismi select elementine de option  olarak eklensin =>  renderOptionList fonkiyonu
 function renderOptionList() {
     const subscribers = [
         document.getElementById("toUser"),
@@ -65,22 +68,37 @@ function renderOptionList() {
         optionList.forEach(function(item){
             const newOption = document.createElement("option");
             newOption.innerText = item.name;
+            newOption.setAttribute("value", item.name)
             subscriber.appendChild(newOption)
         })
     })
 
 }
+function setState(stateName, newValue) {
+    state[stateName] = newValue;
+    renderUserList();
+}
 
 function createUser() {
   const userName = document.getElementById("newUserName").value;
   const userBalance = document.getElementById("newUserBalance").value;
-  userList.push({
-      name: userName,
-      balance:userBalance
-  });
+  setState("userList",[...state.userList, 
+    {
+        name: userName,
+        balance:userBalance
+    }])
   optionList.push({
       name: userName,
   });
-  renderUserList();
   renderOptionList();
+  
+}
+const id = function () { // creates a unique ID
+    return Math.ceil(Math.random()*100000-1);
+};
+
+function transactionalAction() {
+    const sender = document.getElementById("fromUser").value;
+    const receiver = document.getElementById("toUser").value;
+    console.log(sender,receiver);
 }
