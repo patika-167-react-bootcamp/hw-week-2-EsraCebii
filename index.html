@@ -70,13 +70,14 @@
                   <select
                     id="fromUser"
                     onchange="selectOption()"
+                    class="form-select"
                   >
                     <option value="Esra">Esra</option>
                     <option value="İsmail">İsmail</option>
                   </select>
                 </div>
                 <div class="col">
-                  <select id="toUser" onchange="selectOption()">
+                  <select id="toUser"  class="form-select" onchange="selectOption()">
                     <option value="Esra">Esra</option>
                     <option value="İsmail">İsmail</option>
                   </select>
@@ -135,7 +136,7 @@
           <div class="container p-3">
             <div class="card">
               <h6 class="card-header">History</h6>
-              <ul class="list-group list-group-flush">
+              <ul class="list-group list-group-flush" id="history-list">
                 <li class="list-group-item">An item</li>
                 <li class="list-group-item">A second item</li>
                 <li class="list-group-item">A third item</li>

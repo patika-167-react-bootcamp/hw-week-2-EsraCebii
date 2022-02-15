@@ -25,8 +25,10 @@ const state = {
           name: "İsmail",
           balance: 1000,
         },
-      ]
+      ],
+    historyList: []
 }
+
 
 const optionList = [
     {
@@ -36,6 +38,7 @@ const optionList = [
         name: "İsmail"
     }
 ]
+
 
 function renderUserList() {
     const subscribers = [
@@ -57,6 +60,20 @@ function renderUserList() {
     })
 
 }
+function renderHistoryList() {
+    const subscribers = [
+        document.getElementById("history-list"),
+    ]
+    subscribers.forEach(function(subscriber){
+        subscriber.innerHTML = ""
+        state.historyList.forEach(function(item){
+            const newLi = document.createElement("li");
+            newLi.className = "list-group-item";
+            newLi.innerText = `${item.sender} sent ${item.amount} to ${item.receiver}.` 
+            subscriber.appendChild(newLi)      
+        })
+    })
+}
 // Yeni bir kullanıcı eklendiğinde, para transferi kısmında kullanıcı  ismi select elementine de option  olarak eklensin =>  renderOptionList fonkiyonu
 function renderOptionList() {
     const subscribers = [
@@ -77,6 +94,7 @@ function renderOptionList() {
 function setState(stateName, newValue) {
     state[stateName] = newValue;
     renderUserList();
+    renderHistoryList();
 }
 
 function createUser() {
@@ -93,12 +111,18 @@ function createUser() {
   renderOptionList();
   
 }
-const id = function () { // creates a unique ID
-    return Math.ceil(Math.random()*100000-1);
-};
+function createHistory() {
+    const senderName = document.getElementById("fromUser").value;
+    const receiverName = document.getElementById("toUser").value;
+    const amount = document.getElementById("amount").value;
+    setState("historyList", [...state.historyList, {
+        sender: senderName,
+        receiver: receiverName,
+        amount: amount
+    }])
+}
+
 
 function transactionalAction() {
-    const sender = document.getElementById("fromUser").value;
-    const receiver = document.getElementById("toUser").value;
-    console.log(sender,receiver);
+   createHistory();
 }
