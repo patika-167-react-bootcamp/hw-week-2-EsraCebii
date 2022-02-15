@@ -19,11 +19,11 @@ const state = {
     userList: [
         {
           name: "Esra",
-          balance: 600,
+          balance: 10,
         },
         {
           name: "İsmail",
-          balance: 1000,
+          balance: 20,
         },
       ],
     historyList: []
@@ -69,7 +69,7 @@ function renderHistoryList() {
         state.historyList.forEach(function(item){
             const newLi = document.createElement("li");
             newLi.className = "list-group-item";
-            newLi.innerText = `${item.sender} sent ${item.amount} to ${item.receiver}.` 
+            newLi.innerText = `${item.timestamp} - ${item.message}`, 
             subscriber.appendChild(newLi)      
         })
     })
@@ -89,7 +89,6 @@ function renderOptionList() {
             subscriber.appendChild(newOption)
         })
     })
-
 }
 function setState(stateName, newValue) {
     state[stateName] = newValue;
@@ -109,20 +108,37 @@ function createUser() {
       name: userName,
   });
   renderOptionList();
-  
 }
-function createHistory() {
-    const senderName = document.getElementById("fromUser").value;
-    const receiverName = document.getElementById("toUser").value;
-    const amount = document.getElementById("amount").value;
-    setState("historyList", [...state.historyList, {
-        sender: senderName,
-        receiver: receiverName,
-        amount: amount
-    }])
+function addHistory(value) {
+    setState("historyList", [...state.historyList])
 }
-
+const date = new Date();
 
 function transactionalAction() {
-   createHistory();
+    const copy = [...state.userList]
+    const senderName = document.getElementById("fromUser").value;
+    const receiverName = document.getElementById("toUser").value;
+    const amount = Number(document.getElementById("amount").value);
+    const sender = copy.find(item => item.name === senderName);
+    const receiver = copy.find(item => item.name === receiverName)
+    if(sender.name === receiver.name) {
+        setState("historyList", [...state.historyList, 
+            {timestamp:`${date.getHours()}:${date.getMinutes()}`,message:`Sender and receiver is same person`}
+        ])
+        return 
+
+    }
+    if(sender.balance < amount) {
+        setState("historyList", [...state.historyList, 
+            {timestamp:`${date.getHours()}:${date.getMinutes()}`,message:`Insufficient balance.`}
+        ])
+        return
+    }
+    sender.balance = sender.balance - amount;
+    receiver.balance = receiver.balance + amount;
+    setState("historyList", [...state.historyList, 
+        {timestamp:`${date.getHours()}:${date.getMinutes()}`,message:`${sender.name} sent ${amount} to ${receiver.name}. Now ${sender.name} is ${sender.balance} ${receiver.name} is ${receiver.balance}.`}
+    ])
+     
 }
+
