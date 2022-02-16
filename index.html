@@ -69,15 +69,17 @@
                 <div class="col">
                   <select
                     id="fromUser"
-                    onchange="selectOption()"
                     class="form-select"
                   >
-                    <option value="Esra">Esra</option>
-                    <option value="İsmail">İsmail</option>
+                  <option selected>From</option>
+                  <option value="Esra">Esra</option>
+                  <option value="İsmail">İsmail</option>
+
                   </select>
                 </div>
                 <div class="col">
-                  <select id="toUser"  class="form-select" onchange="selectOption()">
+                  <select id="toUser"  class="form-select" >
+                    <option selected>To</option>
                     <option value="Esra">Esra</option>
                     <option value="İsmail">İsmail</option>
                   </select>
@@ -119,14 +121,14 @@
                   class="list-group-item d-flex justify-content-between align-items-start"
                 >
                   <div>Esra</div>
-                  <span>10</span>
+                  <span>600 <button class="btn-close pl-1" ></button></span>
                 </li>
                 <li
-                class="list-group-item d-flex justify-content-between align-items-start"
-              >
-                <div>İsmail</div>
-                <span>20</span>
-              </li>
+                  class="list-group-item d-flex justify-content-between align-items-start"
+                >
+                  <div>İsmail</div>
+                  <span>800 <button class="btn-close pl-1" ></button></span>
+                </li>
               </ul>
             </div>
           </div>
