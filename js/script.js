@@ -165,6 +165,26 @@ function deleteUser(id) {
     ])
 }
 function deleteHistory(id) {
-    console.log(id);
-    
-}
+        
+    const copy = [...state.userList]
+    const senderName = document.getElementById("fromUser").value;
+    const receiverName = document.getElementById("toUser").value;
+    const amount = Number(document.getElementById("amount").value);
+    const sender = copy.find(item => item.name === senderName);
+    const receiver = copy.find(item => item.name === receiverName)
+    if(copy.includes(sender) && copy.includes(receiver)) {
+        sender.balance = sender.balance + amount;
+        receiver.balance = receiver.balance - amount;
+        console.log(copy, "copy");
+        console.log("ikisi de var");
+       setState("userList", copy)
+    } else {
+        setState("historyList", [...state.historyList, 
+            {timestamp:`${date.getHours()}:${date.getMinutes()}`,message:`One or both users have been deleted.`, id: Date.now()}
+        ])
+    } 
+        const newHistoryList = state.historyList.filter(item => item.id !== id);
+        setState("historyList", newHistoryList)
+    }
+
+
