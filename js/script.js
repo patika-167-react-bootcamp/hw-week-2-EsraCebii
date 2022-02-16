@@ -95,6 +95,7 @@ function setState(stateName, newValue) {
 }
 const date = new Date();
 
+// Yeni bir kullanıcı ekleme fonksiyonu yazdık. userList dizisini güncelledik.
 function createUser() {
   const userName = document.getElementById("newUserName").value;
   const userBalance = document.getElementById("newUserBalance").value;
@@ -127,6 +128,7 @@ function addHistory() {
 
 
 function transactionalAction() {
+// Gerekli değişkenleri tanımladık.
     const copy = [...state.userList]
     const senderName = document.getElementById("fromUser").value;
     const receiverName = document.getElementById("toUser").value;
@@ -134,6 +136,7 @@ function transactionalAction() {
     const sender = copy.find(item => item.name === senderName);
     const receiver = copy.find(item => item.name === receiverName)
     if(sender.name === receiver.name) {
+// Gönderen ve alıcı aynı kişiyse history'e bu durumu uyarı olarak ekledik.
         setState("historyList", [...state.historyList, 
             {timestamp:`${date.getHours()}:${date.getMinutes()}`,message:`Sender and receiver is same person`, id: Date.now()}
         ])
@@ -141,11 +144,13 @@ function transactionalAction() {
 
     }
     if(sender.balance < amount) {
+// Gönderenin bakiyesi göndermek istediği miktardan az ise historyList' e bu durumu uyarı olarak ekledik.
         setState("historyList", [...state.historyList, 
             {timestamp:`${date.getHours()}:${date.getMinutes()}`,message:`Insufficient balance.`, id: Date.now()}
         ])
         return
     }
+// Diğer koşullar dışında bir durum varsa yani her şey uygunsa para gönderme işlemini gerçekleştirdik. HistoryList'i güncelledik.
     sender.balance = sender.balance - amount;
     receiver.balance = receiver.balance + amount;
     setState("historyList", [...state.historyList, 
@@ -165,7 +170,7 @@ function deleteUser(id) {
     ])
 }
 function deleteHistory(id) {
-        
+// History silme fonksiyonunda bize lazım olacak değişkenleri bulduk.   
     const copy = [...state.userList]
     const senderName = document.getElementById("fromUser").value;
     const receiverName = document.getElementById("toUser").value;
@@ -173,16 +178,19 @@ function deleteHistory(id) {
     const sender = copy.find(item => item.name === senderName);
     const receiver = copy.find(item => item.name === receiverName)
     if(copy.includes(sender) && copy.includes(receiver)) {
+// Hem gönderen hem alıcı hala userList dizisinde mevcutsa  işlemi geri al
         sender.balance = sender.balance + amount;
         receiver.balance = receiver.balance - amount;
         console.log(copy, "copy");
         console.log("ikisi de var");
        setState("userList", copy)
     } else {
+ // Gönderen veya alıcının herhangi biri veya ikisi de silinmişse historyList'e uyarı çıkar.
         setState("historyList", [...state.historyList, 
             {timestamp:`${date.getHours()}:${date.getMinutes()}`,message:`One or both users have been deleted.`, id: Date.now()}
         ])
     } 
+// Seçtiğimiz history satırını bütün diziden filreledik onun olmadığı diziyi yeni bir objeye atadık. O objeyi de hisoryList ile değiştirdik.
         const newHistoryList = state.historyList.filter(item => item.id !== id);
         setState("historyList", newHistoryList)
     }
