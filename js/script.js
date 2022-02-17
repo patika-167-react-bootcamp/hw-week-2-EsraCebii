@@ -70,6 +70,7 @@ function renderHistoryList() {
     });
   });
 }
+// History dizisini kaybetmemek için yeni bir dizi oluşturduk. Filterenen halini bu diziye atadık.
 function renderFilteredList() {
   const subscribers = [document.getElementById("history-list")];
   subscribers.forEach(function (subscriber) {
@@ -245,6 +246,7 @@ function handleChange() {
   const filter = document.getElementById("selectFilter").value;
 
   if(filter === "both" ) {
+    // inputtaki değer hem sender hem receiver olarak aratılıyorsa
     const filteredList = copy.filter((item)=>  (item.sender).toLowerCase() || (item.receiver).toLowerCase() === input )
     setState("filteredList", filteredList)
     renderFilteredList()
@@ -253,6 +255,7 @@ function handleChange() {
 
 
   if(filter === "sender") {
+    //  input değeri sender olarak isteniyorsa;
     const filteredSender = copy.filter((item) => item.sender && item.sender.toLowerCase() === input)
     console.log(filteredSender, "filtered");
     setState("filteredList", filteredSender)
@@ -260,6 +263,7 @@ function handleChange() {
 
   }
   if( filter === "receiver") {
+    // sadece receiver olarak input değeri giriliyorsa;
     const filteredReceiver = copy.filter((item) => item.receiver && item.receiver.toLowerCase() === input)
     console.log(filteredReceiver);
     setState("filteredList", filteredReceiver)
