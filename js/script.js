@@ -181,17 +181,39 @@ function transactionalAction() {
   // Diğer koşullar dışında bir durum varsa yani her şey uygunsa para gönderme işlemini gerçekleştirdik. HistoryList'i güncelledik.
   sender.balance = sender.balance - amount;
   receiver.balance = receiver.balance + amount;
-  setState("historyList", [
-    ...state.historyList,
-    {
-      timestamp: `${date.getHours()}:${date.getMinutes()}`,
-      message: `${sender.name} sent ${amount} to ${receiver.name}. Now ${sender.name} is ${sender.balance} ${receiver.name} is ${receiver.balance}.`,
-      id: Date.now(),
-      sender: `${sender.name}`,
-      receiver: `${receiver.name}`,
-    },
-  ]);
-  console.log(state.historyList);
+  const input = document.getElementById("search-input").value.toLowerCase();
+  // Filtre varken para transferi gerekleştiğinde işlem hemen filtrelenmiş listede gözüksün.
+  if(input) {
+    setState("filteredList", [
+      ...state.filteredList,
+      {
+        timestamp: `${date.getHours()}:${date.getMinutes()}`,
+        message: `${sender.name} sent ${amount} to ${receiver.name}. Now ${sender.name} is ${sender.balance} ${receiver.name} is ${receiver.balance}.`,
+        id: Date.now(),
+        sender: `${sender.name}`,
+        receiver: `${receiver.name}`,
+      },
+    ]);
+    renderFilteredList()
+    console.log(state.filteredList, "filteredLit");
+
+  } else {
+    setState("historyList", [
+      ...state.historyList,
+      {
+        timestamp: `${date.getHours()}:${date.getMinutes()}`,
+        message: `${sender.name} sent ${amount} to ${receiver.name}. Now ${sender.name} is ${sender.balance} ${receiver.name} is ${receiver.balance}.`,
+        id: Date.now(),
+        sender: `${sender.name}`,
+        receiver: `${receiver.name}`,
+      },
+    ]);
+
+
+  }
+ 
+  
+
 }
 
 // kullanıcı silme fonksiyonu
@@ -266,7 +288,8 @@ function handleChange() {
     // sadece receiver olarak input değeri giriliyorsa;
     const filteredReceiver = copy.filter((item) => item.receiver && item.receiver.toLowerCase() === input)
     console.log(filteredReceiver);
-    setState("filteredList", filteredReceiver)
+    setState("filteredList", filteredReceiver);
+
     renderFilteredList()
     
   }
