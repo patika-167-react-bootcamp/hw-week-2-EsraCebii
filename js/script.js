@@ -12,17 +12,11 @@ const state = {
     },
   ],
   historyList: [],
-  filteredList: []
+  filteredList: [],
+  stockList: [],
+  cartList: [],
 };
 
-const optionList = [
-  {
-    name: "Esra",
-  },
-  {
-    name: "İsmail",
-  },
-];
 
 
 function renderUserList() {
@@ -42,9 +36,66 @@ function renderUserList() {
         item.balance +
         `<button class='btn-close ml-1' onclick='deleteUser(${dataId})'></button>` +
         "</span>";
-
       yeniLi.appendChild(nameDiv);
       yeniLi.appendChild(span);
+
+      subscriber.appendChild(yeniLi);
+    });
+  });
+  const totalLi = document.createElement("li");
+  totalLi.className =
+  "list-group-item d-flex justify-content-between align-items-start";
+  
+  // Total fiyatıoluştur
+}
+
+function renderProductList() {
+  const subscribers = [document.getElementById("stock-list")];
+  subscribers.forEach(function (subscriber) {
+    subscriber.innerHTML = "";
+    state.stockList.forEach(function (item) {
+      const yeniLi = document.createElement("li");
+      yeniLi.className =
+        "list-group-item d-flex justify-content-between align-items-start";
+      const dataId = item.id;
+      const nameDiv = document.createElement("div");
+      nameDiv.innerText = item.name;
+      const span = document.createElement("span");
+      span.innerHTML =
+        "<span>" +
+        item.amount +
+        `<button class='btn btn-secondary btn-sm' onclick='addToCart(${dataId})'>add to cart</button>` +
+        "</span>";
+      yeniLi.appendChild(nameDiv);
+      yeniLi.appendChild(span);
+
+      subscriber.appendChild(yeniLi);
+    });
+  });
+}
+function renderCartList() {
+  const subscribers = [document.getElementById("cart-list")];
+  subscribers.forEach(function (subscriber) {
+    subscriber.innerHTML = "";
+    state.cartList.forEach(function (item) {
+      const yeniLi = document.createElement("li");
+      yeniLi.className =
+        "list-group-item d-flex justify-content-between align-items-start";
+      const dataId = item.id;
+      const nameDiv = document.createElement("div");
+      nameDiv.className= "row";
+      const nameCol = document.createElement("div");
+      nameCol.className = "col-4"
+      nameCol.innerText = item.name;
+      const amountCol = document.createElement("div");
+      nameCol.className = "col-4"
+      amountCol.innerText = item.amount;;
+      const priceCol = document.createElement("div");
+      priceCol.className = "col-4"
+      priceCol.innerText = item.price;
+      yeniLi.appendChild(nameCol);
+      yeniLi.appendChild(amountCol);
+      yeniLi.appendChild(priceCol);
 
       subscriber.appendChild(yeniLi);
     });
@@ -99,7 +150,7 @@ function renderOptionList() {
   ];
   subscribers.forEach(function (subscriber) {
     subscriber.innerHTML = "";
-    optionList.forEach(function (item) {
+    state.userList.forEach(function (item) {
       const newOption = document.createElement("option");
       newOption.innerText = item.name;
       newOption.setAttribute("value", item.name);
@@ -111,6 +162,9 @@ function setState(stateName, newValue) {
   state[stateName] = newValue;
   renderUserList();
   renderHistoryList();
+  renderProductList();
+  renderCartList()
+  renderOptionList()
 }
 const date = new Date();
 
@@ -134,11 +188,30 @@ function createUser() {
       message: `${userName} became a new customer with balance ${userBalance}.`,
     },
   ]);
-  optionList.push({
-    name: userName,
-  });
+  setState("optionList", [
+    ...state.optionList,
+    {
+      name: userName,
+      id: Date.now()
+    }
+  ])
   renderOptionList();
   console.log(state.historyList);
+}
+function createProduct() {
+  const productName = document.getElementById("productName").value;
+  const amountStock = document.getElementById("amountStock").value;
+  const priceProduct = document.getElementById("priceProduct").value;
+  setState("stockList", [
+    ...state.stockList,
+    {
+      name: productName,
+      amount: Number(amountStock),
+      id: Date.now(),
+      price: Number(priceProduct),
+    },
+  ]);
+  renderProductList();
 }
 
 function addHistory() {
@@ -183,7 +256,7 @@ function transactionalAction() {
   receiver.balance = receiver.balance + amount;
   const input = document.getElementById("search-input").value.toLowerCase();
   // Filtre varken para transferi gerekleştiğinde işlem hemen filtrelenmiş listede gözüksün.
-  if(input) {
+  if (input) {
     setState("filteredList", [
       ...state.filteredList,
       {
@@ -194,9 +267,8 @@ function transactionalAction() {
         receiver: `${receiver.name}`,
       },
     ]);
-    renderFilteredList()
+    renderFilteredList();
     console.log(state.filteredList, "filteredLit");
-
   } else {
     setState("historyList", [
       ...state.historyList,
@@ -208,12 +280,7 @@ function transactionalAction() {
         receiver: `${receiver.name}`,
       },
     ]);
-
-
   }
- 
-  
-
 }
 
 // kullanıcı silme fonksiyonu
@@ -229,6 +296,7 @@ function deleteUser(id) {
       id: Date.now(),
     },
   ]);
+
 }
 function deleteHistory(id) {
   // History silme fonksiyonunda bize lazım olacak değişkenleri bulduk.
@@ -243,6 +311,7 @@ function deleteHistory(id) {
     sender.balance = sender.balance + amount;
     receiver.balance = receiver.balance - amount;
     console.log(copy, "copy");
+    console.log(sender, receiver);
     console.log("ikisi de var");
     setState("userList", copy);
   } else {
@@ -267,30 +336,78 @@ function handleChange() {
   const input = document.getElementById("search-input").value.toLowerCase();
   const filter = document.getElementById("selectFilter").value;
 
-  if(filter === "both" ) {
+  if (filter === "both") {
     // inputtaki değer hem sender hem receiver olarak aratılıyorsa
-    const filteredList = copy.filter((item)=>  (item.sender).toLowerCase() || (item.receiver).toLowerCase() === input )
-    setState("filteredList", filteredList)
-    renderFilteredList()
-    
+    const filteredList = copy.filter(
+      (item) =>
+        item.sender.toLowerCase() || item.receiver.toLowerCase() === input
+    );
+    setState("filteredList", filteredList);
+    renderFilteredList();
   }
 
-
-  if(filter === "sender") {
+  if (filter === "sender") {
     //  input değeri sender olarak isteniyorsa;
-    const filteredSender = copy.filter((item) => item.sender && item.sender.toLowerCase() === input)
+    const filteredSender = copy.filter(
+      (item) => item.sender && item.sender.toLowerCase() === input
+    );
     console.log(filteredSender, "filtered");
-    setState("filteredList", filteredSender)
-    renderFilteredList()
-
+    setState("filteredList", filteredSender);
+    renderFilteredList();
   }
-  if( filter === "receiver") {
+  if (filter === "receiver") {
     // sadece receiver olarak input değeri giriliyorsa;
-    const filteredReceiver = copy.filter((item) => item.receiver && item.receiver.toLowerCase() === input)
+    const filteredReceiver = copy.filter(
+      (item) => item.receiver && item.receiver.toLowerCase() === input
+    );
     console.log(filteredReceiver);
     setState("filteredList", filteredReceiver);
 
-    renderFilteredList()
-    
+    renderFilteredList();
   }
+}
+//Sepete ekleme fonksiyonu
+function addToCart(id) {
+  const copy = [...state.stockList];
+  const List = copy.filter((item) => item.id === id);
+  const product = List[0];
+
+  const copy2 = [...state.cartList];
+  const addedCart = copy2.filter(item=> item.id === id);
+  const sameProduct = addedCart[0]
+  // Ürün zaten sepette varsa yeniden ürün ekleme miktarı ve fiyatı artır
+  if(addedCart.length >= 1) {
+    const unchangedProducts = state.cartList.filter(item => item.name !== sameProduct.name);
+    setState("cartList", unchangedProducts);
+    setState("cartList", [
+      ...state.cartList,
+      {
+        name: sameProduct.name,
+        amount: Number(sameProduct.amount + 1),
+        id: sameProduct.id,
+        price: product.price * Number(sameProduct.amount + 1),
+      },
+    ]);
+
+    // eklenen ürün sepette yoksa;
+  } else {
+    setState("cartList", [
+      ...state.cartList,
+      {
+        name: product.name,
+        amount: 1,
+        id: product.id,
+        price: Number(product.price),
+      },
+    ]);
+
+  }
+  renderCartList();
+}
+
+function sale(){
+  const buyer = document.getElementById("cartOwner").value;
+  console.log(buyer);
+
+
 }

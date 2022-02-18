@@ -17,11 +17,11 @@
     <title>Homework Week 2</title>
   </head>
   <body>
-    <div class="container mt-3">
+    <div class="container mt-3 mx-1">
       <div class="row">
         <!-- Create User Area -->
-        <div class="col-4">
-          <div class="container p-3">
+        <div class="col-2">
+          
             <div class="card">
               <h6 class="card-header">Create a user</h6>
               <div class="row card-body">
@@ -37,7 +37,7 @@
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col mt-1">
+                    <div class="col mb-1">
                       <input
                         type="number"
                         class="form-control"
@@ -47,7 +47,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-3 d-flex">
+                <div>
                   <button
                     type="button"
                     class="btn btn-outline-success align-items-center"
@@ -58,14 +58,14 @@
                 </div>
               </div>
             </div>
-          </div>
+        
         </div>
-        <!-- Money Transfer -->
-        <div class="col-8">
-          <div class="container p-3">
+       
+        <div class="col-4">
+           <!-- Money Transfer -->
             <div class="card">
               <h6 class="card-header">Money Transfer</h6>
-              <div class="row card-body m-4">
+              <div class="row m-1">
                 <div class="col">
                   <select
                     id="fromUser"
@@ -84,6 +84,8 @@
                     <option value="İsmail">İsmail</option>
                   </select>
                 </div>
+              </div>
+              <div class="row m-1">
                 <div class="col">
                   <input
                     type="number"
@@ -100,15 +102,80 @@
                 </div>
               </div>
             </div>
+        </div>
+        <!-- Create Product -->
+        <div class="col-3">
+          
+          <div class="card">
+            <h6 class="card-header">Create Product</h6>
+            <div class="row m-1">
+              <div class="col">
+                <input
+                type="text"
+                class="form-control"
+                placeholder="Product Name"
+                id="productName"
+              />
+              </div>
+              <div class="col">
+                <input
+                type="number"
+                class="form-control"
+                placeholder="Amount in stock"
+                id="amountStock"
+              />
+              </div>
+            </div>
+            <div class="row m-1">
+              <div class="col">
+                <input
+                type="number"
+                class="form-control"
+                placeholder="Price"
+                id="priceProduct"
+              />
+              </div>
+
+              <div class="col">
+                <button type="button" class="btn btn-outline-success" onclick="createProduct()">
+                  Add 
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+          <!-- Cart Details -->
+        <div class="col-3">
+          <div class="card">
+            <h6 class="card-header">Cart Details</h6>
+            <div class="row m-1">
+              <select
+              id="cartOwner"
+              class="form-select"
+            >
+            <option selected>Cart Owner</option>
+            <option value="Esra">Esra</option>
+            <option value="İsmail">İsmail</option>
+
+            </select>
+
+            </div>
+            <div class="row m-1">
+              <button type="button" class="btn btn-outline-success" onclick="sale()" >
+                sales
+              </button>
+
+            </div>
+
           </div>
         </div>
       </div>
     </div>
-    <div class="container mt-3">
+    <div class="container mt-3 mx-1">
       <div class="row">
         <!-- Transaction Detail -->
-        <div class="col-4 p-2">
-          <div class="container p-3">
+        <div class="col-2">
+          
             <div class="card">
               <div class="card-header">
                 <div class="d-flex justify-content-between align-items-center">
@@ -121,21 +188,21 @@
                   class="list-group-item d-flex justify-content-between align-items-start"
                 >
                   <div>Esra</div>
-                  <span>600 <button class="btn-close pl-1" ></button></span>
+                  <span>600 <button class="btn-close" ></button></span>
                 </li>
                 <li
                   class="list-group-item d-flex justify-content-between align-items-start"
                 >
                   <div>İsmail</div>
-                  <span>800 <button class="btn-close pl-1" ></button></span>
+                  <span>800 <button class="btn-close" ></button></span>
                 </li>
               </ul>
             </div>
-          </div>
+         
         </div>
         <!-- History -->
-        <div class="col-8 p-2">
-          <div class="container p-3">
+        <div class="col-4">
+          
             <div class="card">
               <h6 class="card-header">History</h6>
                 <div class="input-group">
@@ -155,6 +222,38 @@
               <ul class="list-group list-group-flush" id="history-list">
               </ul>
             </div>
+         
+        </div>
+        <div class="col-3">
+           
+          <div class="card">
+            <div class="card-header">
+              <div class="d-flex justify-content-between align-items-center">
+                <h6>Product Name</h6>
+                <h6>Amount</h6>
+              </div>
+            </div>
+            <ul class="list-group list-group-flush" id="stock-list">
+              <!-- <li
+                  class="list-group-item d-flex justify-content-between align-items-start"
+                >
+              <div>Masa</div>
+              <span>3 <button class="btn btn-secondary btn-sm">add</button></span>
+              </li> -->
+            </ul>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="card">
+            
+            
+            <div class="d-flex justify-content-between align-items-center">
+              <h6> Name</h6>
+              <h6> Amount</h6>
+              <h6> Price</h6>
+            </div>
+            <ul class="list-group list-group-flush" id="cart-list">
+            </ul>
           </div>
         </div>
       </div>
