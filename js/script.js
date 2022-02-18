@@ -15,6 +15,16 @@ const state = {
   filteredList: [],
   stockList: [],
   cartList: [],
+  optionList: [
+    {
+      name: "Esra",
+      id: 26
+    },
+    {
+      name: "İsmail",
+      id: 13
+    }
+  ]
 };
 
 
@@ -73,6 +83,8 @@ function renderProductList() {
     });
   });
 }
+
+
 function renderCartList() {
   const subscribers = [document.getElementById("cart-list")];
   subscribers.forEach(function (subscriber) {
@@ -99,8 +111,22 @@ function renderCartList() {
 
       subscriber.appendChild(yeniLi);
     });
+    const totalPrice = state.cartList.reduce((arr, item) => {
+      return arr + item.price
+    },0)
+    const totalLi = document.createElement("li");
+    totalLi.className =
+      "list-group-item d-flex justify-content-between align-items-start";
+   
+    totalLi.innerHTML = "<div>" + "Total Price:" + "" +
+    `<span id="totalPrice">${totalPrice}</span>` +
+    "</div>";;
+    subscriber.appendChild(totalLi)
   });
+ 
+
 }
+
 function renderHistoryList() {
   const subscribers = [document.getElementById("history-list")];
   subscribers.forEach(function (subscriber) {
@@ -150,7 +176,21 @@ function renderOptionList() {
   ];
   subscribers.forEach(function (subscriber) {
     subscriber.innerHTML = "";
-    state.userList.forEach(function (item) {
+    state.optionList.forEach(function (item) {
+      const newOption = document.createElement("option");
+      newOption.innerText = item.name;
+      newOption.setAttribute("value", item.name);
+      subscriber.appendChild(newOption);
+    });
+  });
+}
+function renderSalesList() {
+  const subscribers = [
+    document.getElementById("cartOwner"),
+  ];
+  subscribers.forEach(function (subscriber) {
+    subscriber.innerHTML = "";
+    state.optionList.forEach(function (item) {
       const newOption = document.createElement("option");
       newOption.innerText = item.name;
       newOption.setAttribute("value", item.name);
@@ -165,6 +205,7 @@ function setState(stateName, newValue) {
   renderProductList();
   renderCartList()
   renderOptionList()
+  renderSalesList()
 }
 const date = new Date();
 
@@ -191,11 +232,11 @@ function createUser() {
   setState("optionList", [
     ...state.optionList,
     {
+      id: Date.now(),
       name: userName,
-      id: Date.now()
-    }
-  ])
-  renderOptionList();
+    },
+  ]);
+  
   console.log(state.historyList);
 }
 function createProduct() {
@@ -296,7 +337,7 @@ function deleteUser(id) {
       id: Date.now(),
     },
   ]);
-
+  
 }
 function deleteHistory(id) {
   // History silme fonksiyonunda bize lazım olacak değişkenleri bulduk.
@@ -313,7 +354,6 @@ function deleteHistory(id) {
     console.log(copy, "copy");
     console.log(sender, receiver);
     console.log("ikisi de var");
-    setState("userList", copy);
   } else {
     // Gönderen veya alıcının herhangi biri veya ikisi de silinmişse historyList'e uyarı çıkar.
     setState("historyList", [
@@ -405,9 +445,36 @@ function addToCart(id) {
   renderCartList();
 }
 
+
 function sale(){
+  const copy =[...state.userList]
   const buyer = document.getElementById("cartOwner").value;
-  console.log(buyer);
+  // satan alan kişinin bakiyesini yenileyelim.
+  const cartOwner = copy.find((user)=> user.name === buyer);
+  const newList = copy.filter((user) => user.name !== buyer);
+  console.log(newList);
+  const totalPrice = document.getElementById("totalPrice").innerText;
+  console.log(totalPrice, "totalPrice");
 
-
+  // kullanıcının yeterli parası varsa;
+  if(cartOwner.balance > totalPrice) {
+    newList.push({
+      name: cartOwner.name,
+      balance: cartOwner.balance-Number(totalPrice),
+      id: cartOwner.id
+  
+    })
+    setState("userList", newList)
+  } else {
+    // parası olmadığı için satın alamazsa historyList e durumu ekle
+    setState("historyList", [
+      ...state.historyList,
+      {
+        timestamp: `${date.getHours()}:${date.getMinutes()}`,
+        message: `The sale could not take place because the user named ${cartOwner.name} does not have enough money.`,
+        id: Date.now(),
+      },
+    ]);
+  }
+ 
 }
