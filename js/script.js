@@ -452,19 +452,36 @@ function sale(){
   // satan alan kişinin bakiyesini yenileyelim.
   const cartOwner = copy.find((user)=> user.name === buyer);
   const newList = copy.filter((user) => user.name !== buyer);
-  console.log(newList);
   const totalPrice = document.getElementById("totalPrice").innerText;
-  console.log(totalPrice, "totalPrice");
 
   // kullanıcının yeterli parası varsa;
-  if(cartOwner.balance > totalPrice) {
+  if(cartOwner.balance >= totalPrice) {
     newList.push({
       name: cartOwner.name,
       balance: cartOwner.balance-Number(totalPrice),
       id: cartOwner.id
   
     })
-    setState("userList", newList)
+    setState("userList", newList);
+    const copyProductList = [...state.stockList];
+    newProductList = state.stockList.filter((stock) => {
+      const productVarmı = state.cartList.map(item =>item.name === stock.name);
+      const amountProduct = state.cartList.find(item =>item.name === stock.name);
+      console.log(amountProduct.amount, "amountProduct");
+      if(productVarmı) {
+        const filteredList = copyProductList.filter(item =>item.name !== stock.name)
+        filteredList.push({
+          name: stock.name,
+          amount: Number(stock.amount)- Number(amountProduct.amount),
+          id: Date.now(),
+          price: Number(stock.price),
+        })
+        setState("stockList", filteredList)
+        console.log(state.stockList, "stockList");
+      } else {
+        console.log("ürün yok");
+      }
+    })
   } else {
     // parası olmadığı için satın alamazsa historyList e durumu ekle
     setState("historyList", [
@@ -476,5 +493,6 @@ function sale(){
       },
     ]);
   }
+
  
 }
