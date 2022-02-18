@@ -15,16 +15,6 @@ const state = {
   filteredList: [],
   stockList: [],
   cartList: [],
-  optionList: [
-    {
-      name: "Esra",
-      id: 26
-    },
-    {
-      name: "İsmail",
-      id: 13
-    }
-  ]
 };
 
 
@@ -176,7 +166,7 @@ function renderOptionList() {
   ];
   subscribers.forEach(function (subscriber) {
     subscriber.innerHTML = "";
-    state.optionList.forEach(function (item) {
+    state.userList.forEach(function (item) {
       const newOption = document.createElement("option");
       newOption.innerText = item.name;
       newOption.setAttribute("value", item.name);
@@ -190,7 +180,7 @@ function renderSalesList() {
   ];
   subscribers.forEach(function (subscriber) {
     subscriber.innerHTML = "";
-    state.optionList.forEach(function (item) {
+    state.userList.forEach(function (item) {
       const newOption = document.createElement("option");
       newOption.innerText = item.name;
       newOption.setAttribute("value", item.name);
@@ -204,8 +194,8 @@ function setState(stateName, newValue) {
   renderHistoryList();
   renderProductList();
   renderCartList()
-  renderOptionList()
   renderSalesList()
+  renderOptionList()
 }
 const date = new Date();
 
@@ -229,13 +219,13 @@ function createUser() {
       message: `${userName} became a new customer with balance ${userBalance}.`,
     },
   ]);
-  setState("optionList", [
-    ...state.optionList,
-    {
-      id: Date.now(),
-      name: userName,
-    },
-  ]);
+  // setState("optionList", [
+  //   ...state.optionList,
+  //   {
+  //     id: Date.now(),
+  //     name: userName,
+  //   },
+  // ]);
   
   console.log(state.historyList);
 }
