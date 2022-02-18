@@ -4,13 +4,15 @@
 
 ## HW-3
 
-![](./assets/image.jpeg)
-
-## Yapılacaklar
+## Konular
 - Yeni Kullanıcı ekleme
 - Para transferi
 - İşlem geçmişi
 - Reactive yapı
+- Ürün listesine ürün ekleme
+- Kullanıcılara ürün satma 
+- sepete ürün ekleme
+
 
 ## Kurallar
 - Framework kullanma
